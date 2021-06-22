@@ -1,4 +1,4 @@
-FROM golang:alpine AS builder
+FROM golang:1.16-alpine AS builder
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN adduser \
 		--no-create-home \
 		--uid "${UID}" \
 		"${USER}" && \
-	apk update && apk add --no-cache git && \
+	apk update && apk add --no-cache git ca-certificates && \
 	go mod download && \
 	go mod verify && \
     CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -ldflags="-w -s" -o kafka-health -v
